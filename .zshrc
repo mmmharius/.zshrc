@@ -1,12 +1,10 @@
-#➤ Configuration Oh My Zsh
+#➤ Configuration Oh My bzezsh
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME=""
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
 source $ZSH/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-#➤ PATH pour Chromium tools
-export PATH="/mnt/c/sys42/CHROMIUM/depot_tools:$PATH:$HOME/.local/bin"
 
 #➤ nous somme FRANCAIS
 export LANG=fr_FR.UTF-8
@@ -26,13 +24,13 @@ function afficher_heure_droite() {
     printf "\033[s\033[1;${position}H\033[1;36m%s\033[0m\033[u" "$affichage"
 }
 
-#➤prompt Git si présente
+#➤prompt Git (si dans un repo git)
 function git_branch_prompt() {
     local branch=$(git symbolic-ref --short HEAD 2>/dev/null)
     [[ -n "$branch" ]] && echo " %F{red}(${branch})%f"
 }
 
-#➤ Prompt personnalisé avec mes couleurs
+#➤ Prompt heure 
 function precmd() {
     afficher_heure_droite
     local heure=$(date '+%H:%M:%S')
@@ -46,7 +44,14 @@ function preexec() {
     afficher_heure_droite
 }
 
-#➤ Couleurs de syntaxe personnalisées
+#➤ clr = heure 
+function clear_avec_heure() {
+    /usr/bin/clear
+    afficher_heure_droite
+    echo
+}
+
+#➤ Couleurs de syntaxe 
 ZSH_HIGHLIGHT_STYLES[command]='fg=078'
 ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=197'
 ZSH_HIGHLIGHT_STYLES[comment]='fg=240'
@@ -64,9 +69,9 @@ zstyle ':completion:*' list-colors 'di=00:fi=00:ln=00:ex=00'
 zstyle ':completion:*' menu select
 zstyle ':completion:*' select-prompt ''
 
-#➤ Aliases Git + clear
-alias clear='command clear && afficher_heure_droite'
-alias clr='command clear && afficher_heure_droite'
+#➤ Aliase
+alias clear='clear_avec_heure'
+alias clr='clear_avec_heure'
 alias gs="git status"
 alias gl="git log --oneline --graph --decorate"
 alias gb="git branch"
@@ -76,10 +81,10 @@ alias gp="git push"
 alias gpl="git pull"
 alias glog="git log --oneline --graph --decorate"
 
-#➤ Répertoire de démarrage
+#➤ Répertoire de démarrage (chez oim sa )
 cd /mnt/c/sys42
 
-#➤ Fonction Claude
+#➤ restreindre repo Claude
 claude() {
     if [[ "$PWD" == "/mnt/c/sys42"* ]]; then
         echo -e "\033[1;32m✅ Claude Code activé\033[0m"
