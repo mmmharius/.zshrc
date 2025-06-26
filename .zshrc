@@ -1,10 +1,9 @@
-#➤ Configuration Oh My bzezsh
+#➤ Configuration Oh My zsh
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME=""
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
 source $ZSH/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-
 
 #➤ nous somme FRANCAIS
 export LANG=fr_FR.UTF-8
@@ -24,10 +23,18 @@ function afficher_heure_droite() {
     printf "\033[s\033[1;${position}H\033[1;36m%s\033[0m\033[u" "$affichage"
 }
 
-#➤prompt Git (si dans un repo git)
+#➤ prompt Git (si dans un repo git)
 function git_branch_prompt() {
     local branch=$(git symbolic-ref --short HEAD 2>/dev/null)
     [[ -n "$branch" ]] && echo " %F{red}(${branch})%f"
+}
+
+#➤ prompt venv
+function venv_prompt() {
+    if [[ -n "$VIRTUAL_ENV" ]] && [[ -d "./venv" ]]; then
+        local venv_name=$(basename "$VIRTUAL_ENV")
+        echo " %F{red}(${venv_name})%f"
+    fi
 }
 
 #➤ Prompt heure 
@@ -36,8 +43,8 @@ function precmd() {
     local heure=$(date '+%H:%M:%S')
     local dossier="${PWD##*/}"
     local branch=$(git_branch_prompt)
-
-    PROMPT="%F{cyan}${heure}%f %F{blue}➜ %f%F{cyan}${dossier}%f${branch} "
+    local venv=$(venv_prompt)
+    PROMPT="%F{cyan}${heure}%f %F{blue}➜ %f%F{cyan}${dossier}%f${branch}${venv} "
 }
 
 function preexec() {
