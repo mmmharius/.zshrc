@@ -95,7 +95,7 @@ cd /mnt/c/sys42
 claude() {
     if [[ "$PWD" == "/mnt/c/sys42"* ]]; then
         echo -e "\033[1;32m✅ Claude Code activé\033[0m"
-        /mnt/c/sys42/node_modules/.bin/claude "$@"
+        /mnt/c/sys42/.node_modules/.bin/claude "$@"
     else
         echo -e "\033[1;31m❌ Claude Code disponible uniquement dans /mnt/c/sys42\033[0m"
     fi
