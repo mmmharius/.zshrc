@@ -72,7 +72,7 @@ ssh-add ~/.ssh/id_rsa 2>/dev/null
 #➤ Auto-completion sans surbrillance moche
 autoload -U colors && colors
 autoload -U compinit && compinit
-zstyle ':completion:*' list-colors 'di=00:fi=00:ln=00:ex=00'
+zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' menu select
 zstyle ':completion:*' select-prompt ''
 
