@@ -4,6 +4,7 @@ ZSH_THEME=""
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
 source $ZSH/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+export LS_COLORS="di=0:ln=0:so=0:pi=0:ex=0:bd=0:cd=0:su=0:sg=0:tw=0:ow=0"
 
 # Variable globale code de retour
 typeset -g last_exit_code=0
@@ -68,6 +69,18 @@ function clear_avec_heure() {
     echo
 }
 
+#???
+function whoami() {
+    cat << "EOF"
+██╗   ██╗███████╗███████╗██████╗  ██████╗ ███╗   ██╗███████╗
+██║   ██║██╔════╝██╔════╝██╔══██╗██╔═══██╗████╗  ██║██╔════╝
+██║   ██║███████╗█████╗  ██████╔╝██║   ██║██╔██╗ ██║█████╗  
+██║   ██║╚════██║██╔══╝  ██╔══██╗██║   ██║██║╚██╗██║██╔══╝  
+╚██████╔╝███████║███████╗██║  ██║╚██████╔╝██║ ╚████║███████╗
+ ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
+EOF
+}
+
 # Couleurs de syntaxe 
 ZSH_HIGHLIGHT_STYLES[command]='fg=078'
 ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=197'
@@ -78,8 +91,6 @@ ZSH_HIGHLIGHT_STYLES[function]='fg=078'
 
 # SSH silencieux
 ssh-add ~/.ssh/id_rsa 2>/dev/null
-
-echo "53244"
 
 # Auto-completion sans surbrillance moche
 autoload -U colors && colors
@@ -99,6 +110,7 @@ alias gc="git commit -m"
 alias gp="git push"
 alias gpl="git pull"
 alias glog="git log --oneline --graph --decorate"
+alias whoami="whoami"
 
 # chez oim sa 
 cd /mnt/c/sys42
