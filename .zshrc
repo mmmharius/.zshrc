@@ -1,4 +1,4 @@
-# Configuration Oh My zsh
+ # Configuration Oh My zsh
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME=""
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
@@ -41,7 +41,7 @@ function venv_prompt() {
     fi
 }
 
-# Prompt heure 
+# Prompt avec heure
 function precmd() {
     last_exit_code=$?
     afficher_heure_droite
@@ -69,15 +69,17 @@ function clear_avec_heure() {
     echo
 }
 
-#???
+# ASCII Art
 function whoami() {
     cat << "EOF"
-██╗   ██╗███████╗███████╗██████╗  ██████╗ ███╗   ██╗███████╗
-██║   ██║██╔════╝██╔════╝██╔══██╗██╔═══██╗████╗  ██║██╔════╝
-██║   ██║███████╗█████╗  ██████╔╝██║   ██║██╔██╗ ██║█████╗  
-██║   ██║╚════██║██╔══╝  ██╔══██╗██║   ██║██║╚██╗██║██╔══╝  
-╚██████╔╝███████║███████╗██║  ██║╚██████╔╝██║ ╚████║███████╗
- ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
+╔═══════════════════════════════════════════════════════════════╗
+║  ██╗   ██╗███████╗███████╗██████╗  ██████╗ ███╗   ██╗███████╗ ║
+║  ██║   ██║██╔════╝██╔════╝██╔══██╗██╔═══██╗████╗  ██║██╔════╝ ║
+║  ██║   ██║███████╗█████╗  ██████╔╝██║   ██║██╔██╗ ██║█████╗   ║
+║  ██║   ██║╚════██║██╔══╝  ██╔══██╗██║   ██║██║╚██╗██║██╔══╝   ║
+║  ╚██████╔╝███████║███████╗██║  ██║╚██████╔╝██║ ╚████║███████╗ ║
+║   ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝ ║
+╚═══════════════════════════════════════════════════════════════╝
 EOF
 }
 
@@ -99,7 +101,8 @@ zstyle ':completion:*' list-colors 'di=0:ln=0:so=0:pi=0:ex=0:bd=0:cd=0:su=0:sg=0
 zstyle ':completion:*' menu select
 zstyle ':completion:*' select-prompt ''
 
-# a moi
+# Mes alias
+alias claude='~/.claude/local/claude'
 alias clear='clear_avec_heure'
 alias clr='clear_avec_heure'
 alias gs="git status"
@@ -108,22 +111,11 @@ alias gb="git branch"
 alias ga="git add ."
 alias gc="git commit -m"
 alias gp="git push"
+alias gpm="git push origin HEAD:main"
 alias gpl="git pull"
 alias glog="git log --oneline --graph --decorate"
 alias whoami="whoami"
 
-# chez oim sa 
+# Dossier de travail
 cd /mnt/c/sys42
-
-# restreindre se grand foud de Claude
-claude() {
-    if [[ "$PWD" == "/mnt/c/sys42"* ]]; then
-        echo -e "\033[1;32m✅ Claude Code activé\033[0m"
-        /mnt/c/sys42/node_modules/.bin/claude "$@"
-    else
-        echo -e "\033[1;31m❌ Claude Code disponible uniquement dans /mnt/c/sys42\033[0m"
-    fi
-}
-
-# Source des styles si existants
-[[ -f ~/.zsh_highlight_config.zsh ]] && source ~/.zsh_highlight_config.zsh
+afficher_heure_droite
