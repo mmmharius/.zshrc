@@ -69,12 +69,12 @@ function whoami() {
 EOF
 }
 
-# TAB sur ligne vide = propose cd, 2ème TAB = menu
+# TAB sur ligne vide = propose cd uniquement avec dossiers
 function smart_tab() {
     if [[ -z "$BUFFER" ]]; then
         BUFFER="cd "
         CURSOR=3
-        zle list-choices
+        zle reset-prompt
     else
         zle expand-or-complete
     fi
@@ -98,6 +98,8 @@ zstyle ':completion:*' list-colors "${LS_COLORS}"
 zstyle ':completion:*' menu select
 zstyle ':completion:*' select-prompt ''
 zstyle ':completion:*' special-dirs true
+zstyle ':completion:*:cd:*' tag-order local-directories
+zstyle ':completion:*:*:cd:*' group-name ''
 
 alias clear='clear_avec_heure'
 alias clr='clear_avec_heure'
@@ -112,8 +114,4 @@ alias gpl="git pull"
 alias glog="git log --oneline --graph --decorate"
 alias whoami="whoami"
 
-[[ -d /home/user/Bureau ]] && cd /home/user/Bureau
-afficher_heure_droite
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+[[ -d /home/user/Desktop ]] && cd /home/user/Desktop
