@@ -1,16 +1,12 @@
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME=""
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
-
 source $ZSH/oh-my-zsh.sh
-
-[[ -f $ZSH/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source $ZSH/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-[[ -f $ZSH/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source $ZSH/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-export LS_COLORS="di=0:ln=0:so=0:pi=0:ex=0:bd=0:cd=0:su=0:sg=0:tw=0:ow=0"
 
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
+
+export LS_COLORS="di=0:ln=0:so=0:pi=0:ex=0:bd=0:cd=0:su=0:sg=0:tw=0:ow=0"
 
 function afficher_heure_droite() {
     local heure_fr=$(date '+%H:%M:%S')
@@ -22,19 +18,16 @@ function afficher_heure_droite() {
     printf "\033[s\033[1;${position}H\033[1;36m%s\033[0m\033[u" "$affichage"
 }
 
-_clock_fd=""
-_clock_pid=""
-
-function _start_clock() {
-    :
-}
-
 TMOUT=1
-
 function TRAPALRM() {
     if zle; then
-        afficher_heure_droite
-        zle reset-prompt
+        if [[ "$WIDGET" != *complete* && "$WIDGET" != *menu-select* \
+           && "$WIDGET" != "smart_tab" && "$WIDGET" != *history* \
+           && "$WIDGET" != *up-line* && "$WIDGET" != *down-line* ]]; 
+           then
+            afficher_heure_droite
+            zle reset-prompt
+        fi
     fi
 }
 
@@ -94,7 +87,6 @@ function smart_tab() {
         zle expand-or-complete
     fi
 }
-
 zle -N smart_tab
 bindkey '^I' smart_tab
 
@@ -105,7 +97,6 @@ ZSH_HIGHLIGHT_STYLES[alias]='fg=078'
 ZSH_HIGHLIGHT_STYLES[builtin]='fg=078'
 ZSH_HIGHLIGHT_STYLES[function]='fg=078'
 
-[[ -f ~/.ssh/id_rsa ]] && ssh-add ~/.ssh/id_rsa 2>/dev/null
 
 autoload -U colors && colors
 autoload -U compinit && compinit
@@ -134,5 +125,14 @@ alias whoami="whoami"
 alias c="code ."
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+function _nvm_lazy_load() {
+    unfunction node npm npx nvm 2>/dev/null
+    [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
+}
+
+function node() { _nvm_lazy_load && node "$@" }
+function npm()  { _nvm_lazy_load && npm "$@" }
+function npx()  { _nvm_lazy_load && npx "$@" }
+function nvm()  { _nvm_lazy_load && nvm "$@" }
