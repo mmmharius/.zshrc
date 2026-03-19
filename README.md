@@ -1,2 +1,2 @@
-Mon Oh My Zsh opti : heure en temps réel, prompt git/venv, alias utiles, complétion propre, et support complet en fr_FR.
-Basée sur Oh My Zsh avec autosuggestions et syntax-highlighting pour plus de confort et bien etre...
+My optimized Oh My Zsh setup: real-time clock, git/venv prompt, useful aliases, clean completion, and full fr_FR support.
+Built on Oh My Zsh with autosuggestions and syntax-highlighting. NVM lazy-loaded for faster shell startup.
