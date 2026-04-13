@@ -8,6 +8,27 @@ export LC_ALL=en_US.UTF-8
 
 export LS_COLORS="di=0:ln=0:so=0:pi=0:ex=0:bd=0:cd=0:su=0:sg=0:tw=0:ow=0"
 
+function setup_scroll_region() {
+    local hauteur=$(tput lines)
+    printf '\033[2;%dr' "$hauteur"
+    printf '\033[2;1H'
+}
+
+function reset_scroll_region() {
+    printf '\033[r'
+}
+trap reset_scroll_region EXIT
+
+function TRAPWINCH() {
+    setup_scroll_region
+    if zle; then
+        afficher_heure_droite
+        zle reset-prompt
+    fi
+}
+
+setup_scroll_region
+
 function afficher_heure_droite() {
     local heure_fr=$(date '+%H:%M:%S')
     local date_courte=$(date '+%d/%m')
@@ -15,7 +36,14 @@ function afficher_heure_droite() {
     local largeur_terminal=$(tput cols)
     local longueur_affichage=${#affichage}
     local position=$((largeur_terminal - longueur_affichage))
-    printf "\033[s\033[1;${position}H\033[1;36m%s\033[0m\033[u" "$affichage"
+    local f="$HOME/.local/share/type-faster/last_run"
+    local today=$(date +%Y-%m-%d)
+    if [[ ! -f "$f" ]] || [[ "$(< "$f")" != "$today" ]]; then
+        local tf_str="\033[2m[tf]\033[0m "
+    else
+        local tf_str="     "
+    fi
+    printf "\033[s\033[1;1H${tf_str}\033[1;${position}H\033[1;36m%s\033[0m\033[u" "$affichage"
 }
 
 TMOUT=1
@@ -29,6 +57,11 @@ function TRAPALRM() {
             zle reset-prompt
         fi
     fi
+}
+
+TRAPINT() {
+    afficher_heure_droite
+    return $(( 128 + $1 ))
 }
 
 typeset -g last_exit_code=0
@@ -60,10 +93,18 @@ function preexec() {
 }
 
 function clear_avec_heure() {
-    command clear
+    printf '\033[2;1H\033[J'
     afficher_heure_droite
-    echo
 }
+
+function clear-screen-with-time() {
+    printf '\033[2;1H\033[J'
+    afficher_heure_droite
+    zle reset-prompt
+}
+zle -N clear-screen-with-time
+bindkey '^L' clear-screen-with-time
+
 
 function whoami() {
     cat << "EOF"
@@ -125,6 +166,7 @@ alias whoami="whoami"
 alias c="code ."
 
 export NVM_DIR="$HOME/.nvm"
+cd /home/oneus/sys42
 
 function _nvm_lazy_load() {
     unfunction node npm npx nvm 2>/dev/null
