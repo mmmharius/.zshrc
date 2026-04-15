@@ -93,11 +93,13 @@ function preexec() {
 }
 
 function clear_avec_heure() {
+    printf '\033[1;1H\033[2K'
     printf '\033[2;1H\033[J'
     afficher_heure_droite
 }
 
 function clear-screen-with-time() {
+    printf '\033[1;1H\033[2K'
     printf '\033[2;1H\033[J'
     afficher_heure_droite
     zle reset-prompt
