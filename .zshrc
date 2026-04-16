@@ -8,26 +8,12 @@ export LC_ALL=en_US.UTF-8
 
 export LS_COLORS="di=0:ln=0:so=0:pi=0:ex=0:bd=0:cd=0:su=0:sg=0:tw=0:ow=0"
 
-function setup_scroll_region() {
-    local hauteur=$(tput lines)
-    printf '\033[2;%dr' "$hauteur"
-    printf '\033[2;1H'
-}
-
-function reset_scroll_region() {
-    printf '\033[r'
-}
-trap reset_scroll_region EXIT
-
 function TRAPWINCH() {
-    setup_scroll_region
     if zle; then
         afficher_heure_droite
         zle reset-prompt
     fi
 }
-
-setup_scroll_region
 
 function afficher_heure_droite() {
     local heure_fr=$(date '+%H:%M:%S')
@@ -93,15 +79,15 @@ function preexec() {
 }
 
 function clear_avec_heure() {
-    printf '\033[1;1H\033[2K'
-    printf '\033[2;1H\033[J'
+    printf '\033c'
     afficher_heure_droite
+    printf '\033[2;1H'
 }
 
 function clear-screen-with-time() {
-    printf '\033[1;1H\033[2K'
-    printf '\033[2;1H\033[J'
+    printf '\033c'
     afficher_heure_droite
+    printf '\033[2;1H'
     zle reset-prompt
 }
 zle -N clear-screen-with-time
@@ -180,3 +166,7 @@ function node() { _nvm_lazy_load && node "$@" }
 function npm()  { _nvm_lazy_load && npm "$@" }
 function npx()  { _nvm_lazy_load && npx "$@" }
 function nvm()  { _nvm_lazy_load && nvm "$@" }
+export PATH="$HOME/.nvm/versions/node/v20.19.5/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+
+printf '\033[2;1H'
